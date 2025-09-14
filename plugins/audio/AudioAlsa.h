@@ -48,7 +48,8 @@ protected:
         logDebug("AudioAlsa::open %s (rate %d, channels %d)\n", deviceName.c_str(), props.sampleRate, props.channels);
 
         int err;
-        if ((err = snd_pcm_open(&handle, deviceName.c_str(), stream, 0)) < 0) {
+        unsigned int open_mode = 0; // blocking
+        if ((err = snd_pcm_open(&handle, deviceName.c_str(), stream, open_mode)) < 0) {
             logDebug("Playback open audio card \"%s\" error: %s.\nOpen default sound card\n", deviceName.c_str(), snd_strerror(err));
             if ((err = snd_pcm_open(&handle, "default", stream, 0)) < 0) {
                 logError("Default playback audio card error: %s\n", snd_strerror(err));
@@ -89,13 +90,7 @@ protected:
         //     return;
         // }
 
-        snd_pcm_uframes_t buffer_size;
-        snd_pcm_hw_params_t* hw_params;
-        snd_pcm_hw_params_get_buffer_size(hw_params, &buffer_size);
-        logDebug("AudioAlsa::openned (periodSize %d, buffer_size %d)\n", periodSize, bufferSize);
-        if (buffer_size != bufferSize) {
-            logWarn("AudioAlsa::openned (buffer_size %d, expected %d)\n", buffer_size, bufferSize);
-        }
+        logDebug("AudioAlsa::opened (periodSize %d, framesPerChunk %d)\n", periodSize, bufferSize);
     }
 
 public:

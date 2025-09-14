@@ -1,6 +1,7 @@
 #pragma once
 
 #include "AudioAlsa.h"
+#include <errno.h>
 
 /*md
 ## AudioOutputAlsa
@@ -23,7 +24,25 @@ public:
         if (bufferIndex >= bufferSize) {
             bufferIndex = 0;
             if (handle) {
-                snd_pcm_sframes_t count = snd_pcm_writei(handle, buffer, audioChunk);
+                // Robust write with short-write and error recovery
+                unsigned int channels = bufferSize / audioChunk;
+                snd_pcm_sframes_t framesToWrite = audioChunk;
+                snd_pcm_sframes_t framesWritten = 0;
+                while (framesToWrite > 0) {
+                    float* ptr = buffer + (framesWritten * channels);
+                    snd_pcm_sframes_t rc = snd_pcm_writei(handle, ptr, framesToWrite);
+                    if (rc < 0) {
+                        rc = snd_pcm_recover(handle, rc, 1);
+                        if (rc < 0) {
+                            logError("ALSA recover failed: %ld\n", (long)rc);
+                            break;
+                        }
+                        logDebug("ALSA recover success: %ld\n", (long)rc);
+                        continue; // recovered, retry write
+                    }
+                    framesWritten += rc;
+                    framesToWrite -= rc;
+                }
             }
         }
         buffer[bufferIndex++] = buf[track];

@@ -11,6 +11,7 @@ import {
     C2,
     C3,
     C4,
+    B3,
     MasterTrack,
     menuTextColor,
     ScreenHeight,
@@ -86,6 +87,13 @@ export function MenuView({ name }: Props) {
                                 value: 0,
                             },
                         ]}
+                    />
+                    <Text
+                        text="Restart Audio"
+                        bounds={[W2_4, ScreenHeight - 40, W1_4, 16]}
+                        centered={true}
+                        color={menuTextColor}
+                        keys={[{ key: B3, action: 'sh:/etc/init.d/S006zicbox restart' }]}
                     />
                     <Text
                         text="YES"

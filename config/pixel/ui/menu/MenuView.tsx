@@ -6,12 +6,14 @@ import { Text } from '@/libs/nativeComponents/Text';
 import { WorkspaceKnob } from '@/libs/nativeComponents/WorkspaceKnob';
 import { rgb } from '@/libs/ui';
 import { Layout } from '../components/Layout';
+import { HiddenValue } from '@/libs/nativeComponents/HiddenValue';
 import {
     C1,
     C2,
     C3,
     C4,
     B3,
+    B4,
     MasterTrack,
     menuTextColor,
     ScreenHeight,
@@ -77,9 +79,11 @@ export function MenuView({ name }: Props) {
                         color={menuTextColor}
                         keys={[{ key: C3, action: `contextToggle:${shutdownContext}:1:0` }]}
                     />
-                    <Rect
-                        bounds={[W3_4, ScreenHeight - 20, W1_4, 16]}
-                        color="background"
+                    <Text
+                        text="Help"
+                        bounds={[W3_4, ScreenHeight - 40, W1_4, 16]}
+                        centered={true}
+                        color={menuTextColor}
                         visibilityContext={[
                             {
                                 condition: 'SHOW_WHEN',
@@ -88,8 +92,14 @@ export function MenuView({ name }: Props) {
                             },
                         ]}
                     />
+
+                    <HiddenValue
+                        keys={[{ key: B4, action: 'setView:HelpScreen' }]}
+                        visibilityContext={[{ condition: 'SHOW_WHEN', index: shutdownContext, value: 0 }]}
+                    />
+                    
                     <Text
-                        text="Restart Audio"
+                        text="Restart"
                         bounds={[W2_4, ScreenHeight - 40, W1_4, 16]}
                         centered={true}
                         color={menuTextColor}

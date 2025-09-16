@@ -71,4 +71,7 @@ export const shiftContext = 254;
 export const clipRenderContext = 200;
 export const seqContext = 201;
 export const shutdownContext = 202;
+export const helpContext = 205;
+export const helpInstrContext = 206;
+export const helpInstrDrumContext = 207;
 export const restartAudioContext = 203;

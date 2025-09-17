@@ -35,6 +35,8 @@ import {
 } from './constantsValue';
 import { DrumViews } from './Drum/DrumViews';
 import { MenuView } from './menu/MenuView';
+import { MinimalHelpView } from './menu/MinimalHelpView';
+import { HelpArticle } from './menu/HelpArticle';
 import { ShuttingDown } from './menu/ShuttingDown';
 import { SampleViews } from './Sample/SampleViews';
 import { SynthViews } from './Synth/SynthViews';
@@ -123,6 +125,9 @@ export const ui = {
             />
 
             <MenuView name="Menu" />
+            <MinimalHelpView name="HelpScreen" />
+            <HelpArticle name="HelpMain" title="Main Screen" body="Overview of the main screen and navigation controls." />
+            <HelpArticle name="HelpSequencer" title="Sequencer View" body="How to use the sequencer view." />
             <ShuttingDown name="ShuttingDown" />
         </>
     ),

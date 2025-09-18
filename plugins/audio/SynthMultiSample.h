@@ -4,6 +4,7 @@
 #include "plugins/audio/MultiSampleEngine/GrainEngine.h"
 #include "plugins/audio/MultiSampleEngine/MonoEngine.h"
 #include "plugins/audio/MultiSampleEngine/StretchEngine.h"
+#include "plugins/audio/MultiSampleEngine/PianoSampleEngine.h"
 #include "plugins/audio/utils/EnvelopDrumAmp.h"
 #include "plugins/audio/utils/utils.h"
 #include "utils/fileBrowser.h"
@@ -22,13 +23,15 @@ protected:
     GrainEngine grainEngine;
     AmEngine amEngine;
     StretchEngine stretchEngine;
+    PianoSampleEngine pianoEngine;
 
-    static const int ENGINES_COUNT = 4;
+    static const int ENGINES_COUNT = 5;
     SampleEngine* engines[ENGINES_COUNT] = {
         &monoEngine,
         &grainEngine,
         &amEngine,
         &stretchEngine,
+        &pianoEngine,
     };
     SampleEngine* engine = engines[0];
 
@@ -151,6 +154,7 @@ public:
         , grainEngine(props, config, sampleBuffer, index, stepMultiplier)
         , amEngine(props, config, sampleBuffer, index, stepMultiplier)
         , stretchEngine(props, config, sampleBuffer, index, stepMultiplier)
+        , pianoEngine(props, config, sampleBuffer, index, stepMultiplier)
     {
         initValues({ &engineVal });
     }

@@ -9,6 +9,9 @@
 #include "plugins/audio/MultiEngine/Wavetable2Engine.h"
 #include "plugins/audio/MultiEngine/BassEngine.h"
 #include "plugins/audio/MultiEngine/StringEngine.h"
+#include "plugins/audio/MultiEngine/PhysicalModelEngine.h"
+#include "plugins/audio/MultiEngine/PhysicalPianoEngine.h"
+#include "plugins/audio/MultiEngine/PianoSamplerEngine.h"
 #include "plugins/audio/utils/AsrEnvelop.h"
 #include "plugins/audio/utils/EnvelopDrumAmp.h"
 
@@ -34,19 +37,12 @@ protected:
     BassEngine bassEngine;
     StringEngine stringEngine;
 
-    static const int ENGINES_COUNT = 9;
-    Engine* engines[ENGINES_COUNT] = {
-        &fmEngine,
-        &wavetableEngine,
-        &wavetable2Engine,
-        &additiveEngine,
-        &additive2Engine,
-        &superSawEngine,
-        &spaceShipEngine,
-        &bassEngine,
-        &stringEngine,
-    };
-    Engine* selectedEngine = engines[0];
+    static const int ENGINES_COUNT = 12;
+    Engine* engines[ENGINES_COUNT];
+    Engine* selectedEngine = nullptr;
+    PhysicalModelEngine* physicalModelEngine = nullptr;
+    PhysicalPianoEngine* physicalPianoEngine = nullptr;
+    PianoSamplerEngine* pianoSamplerEngine = nullptr;
 
     void setEngineVal(Val::CallbackProps p, int index)
     {
@@ -124,7 +120,27 @@ public:
         , bassEngine(props, config)
         , stringEngine(props, config)
     {
+        // Allocate dynamic engines
+        physicalModelEngine = new PhysicalModelEngine(props, config);
+        physicalPianoEngine = new PhysicalPianoEngine(props, config);
+        pianoSamplerEngine = new PianoSamplerEngine(props, config);
+
+        // Wire engine table
+        engines[0] = &fmEngine;
+        engines[1] = &wavetableEngine;
+        engines[2] = &wavetable2Engine;
+        engines[3] = &additiveEngine;
+        engines[4] = &additive2Engine;
+        engines[5] = &superSawEngine;
+        engines[6] = &spaceShipEngine;
+        engines[7] = &bassEngine;
+        engines[8] = &stringEngine;
+        engines[9] = physicalModelEngine;
+        engines[10] = physicalPianoEngine;
+        engines[11] = pianoSamplerEngine;
+
         initValues({ &engine });
+        selectedEngine = engines[0];
     }
 
     void sample(float* buf) override
